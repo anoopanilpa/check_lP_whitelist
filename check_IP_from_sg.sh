@@ -3,7 +3,7 @@
 regions=$(aws ec2 describe-regions --query 'Regions[*].RegionName' --output text)
 
 # Your IP address to check
-MY_IP="IP here"
+MY_IP=3.7.237.29
 
 for region in $regions; do
  
@@ -11,10 +11,10 @@ for region in $regions; do
 SECURITY_GROUPS=$(aws ec2 describe-security-groups --region "$region" --query 'SecurityGroups[*].GroupId' --output text)
 
 # Iterate through each security group
-  for sg_id in "${SECURITY_GROUPS}"; do
-      echo "Checking security group: $sg_id"
+  for sg_id in $SECURITY_GROUPS ; do
+      #echo "Checking security group: $sg_id"
       # Describe ingress rules of the security group
-      aws ec2 describe-security-groups --group-ids "$sg_id" --query 'SecurityGroups[].IpPermissions[]' --output text | \
+      aws ec2 describe-security-groups --region $region --group-ids "$sg_id" --query 'SecurityGroups[].IpPermissions[]' --output text | \
       while read -r line; do
           # Check if your IP is whitelisted
           if echo "$line" | grep -q "$MY_IP"; then
