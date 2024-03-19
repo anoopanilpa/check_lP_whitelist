@@ -3,7 +3,7 @@
 regions=$(aws ec2 describe-regions --query 'Regions[*].RegionName' --output text)
 
 # Your IP address to check
-MY_IP=3.7.237.29
+MY_IP="IP here"
 
 for region in $regions; do
  
@@ -18,7 +18,7 @@ SECURITY_GROUPS=$(aws ec2 describe-security-groups --region "$region" --query 'S
       while read -r line; do
           # Check if your IP is whitelisted
           if echo "$line" | grep -q "$MY_IP"; then
-              echo "Your IP is whitelisted in security group $sg_id region $region"
+              echo "Your IP $MY_IP is whitelisted in security group $sg_id region $region"
               # You can exit here if you only want to know if your IP is whitelisted in any of the security groups.
               # exit 0
           fi
