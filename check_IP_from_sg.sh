@@ -24,6 +24,12 @@ SECURITY_GROUPS=$(aws ec2 describe-security-groups --region "$region" --query 'S
               # exit 0
           fi
       done
+      aws ec2 describe-security-groups --region $region --group-ids "$sg_id" --query 'SecurityGroups[].IpPermissionsEgress[]' --output text | \
+      while read -r line; do
+              if echo "$line" | grep -q "$i"; then
+                      echo "Your IP $i is whitelisted in security group $sg_id region $region"
+              fi
+      done
    done   
   done
 
